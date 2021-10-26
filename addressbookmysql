@@ -177,7 +177,7 @@ mysql> select firstname,city from AddressBook order by city;
 +-----------+---------------+
 5 rows in set (0.00 sec)
 
-//
+
 
 
 
