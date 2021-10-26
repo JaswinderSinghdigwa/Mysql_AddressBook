@@ -1,0 +1,183 @@
+Address Book Record Services
+
+-- UC1 Creating database as AddessBookService
+
+mysql> create database AddressBookRecords;
+
+mysql> show databases;
+
++--------------------+
+| Database           |
++--------------------+
+| AddressBookRecords |
+| employeePayroll    |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.03 sec)
+
+mysql> use AddressBookRecords
+Database changed
+
+
+-- UC2  creating table as AddressBook with attributes
+
+mysql> create table AddressBook(
+    -> firstName varchar(50) not null,
+    -> lastName varchar(50) not null,
+    -> address varchar(50) not null,
+    -> city varchar(50) not null,
+    -> state varchar(20) not null,
+    -> Zipcode int(6) not null,
+    -> phoneNumber double not null,
+    -> email varchar(100) not null );
+Query OK, 0 rows affected, 1 warning (8.88 sec)
+
+mysql> desc AddressBook;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| firstName   | varchar(50)  | NO   |     | NULL    |       |
+| lastName    | varchar(50)  | NO   |     | NULL    |       |
+| address     | varchar(50)  | NO   |     | NULL    |       |
+| city        | varchar(50)  | NO   |     | NULL    |       |
+| state       | varchar(20)  | NO   |     | NULL    |       |
+| Zipcode     | int          | NO   |     | NULL    |       |
+| phoneNumber | double       | NO   |     | NULL    |       |
+| email       | varchar(100) | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+8 rows in set (0.51 sec)
+
+-- UC3 inserting new Contacts to AddressBook table
+
+mysql> insert into AddressBook (firstname, lastname, address,city, state, Zipcode,phoneNumber,email) values
+    -> ('Jaswinder', 'Singh','Kailash Nagar','Bhilai','C.g', 490024, 9425567079,'jaswindersingh@gmail.com'),
+    -> ('Jaspreet', 'Singh','Radika Nagar','Bhopal','M.P', 490026, 9425567078,'jassisingh@gmail.com'),
+    -> ('Gurbaaz', 'Singh','Vaishali Nagar','Kanpur','U.P', 490028, 9425569078,'jaspreet@gmail.com');
+Query OK, 3 rows affected (0.31 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from AddressBook;
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+| firstName | lastName | address        | city   | state | Zipcode | phoneNumber | email                    |
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+| Jaswinder | Singh    | Kailash Nagar  | Bhilai | C.g   |  490024 |  9425567079 | jaswindersingh@gmail.com |
+| Jaspreet  | Singh    | Radika Nagar   | Bhopal | M.P   |  490026 |  9425567078 | jassisingh@gmail.com     |
+| Gurbaaz   | Singh    | Vaishali Nagar | Kanpur | U.P   |  490028 |  9425569078 | jaspreet@gmail.com       |
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+3 rows in set (0.00 sec)
+
+-- UC4 editing the existing contact by their firstname
+
+mysql> update AddressBook set  lastName='Deol' where firstname='Jaswinder';
+Query OK, 1 row affected (0.22 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from AddressBook;
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+| firstName | lastName | address        | city   | state | Zipcode | phoneNumber | email                    |
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+| Jaswinder | Deol     | Kailash Nagar  | Bhilai | C.g   |  490024 |  9425567079 | jaswindersingh@gmail.com |
+| Jaspreet  | Singh    | Radika Nagar   | Bhopal | M.P   |  490026 |  9425567078 | jassisingh@gmail.com     |
+| Gurbaaz   | Singh    | Vaishali Nagar | Kanpur | U.P   |  490028 |  9425569078 | jaspreet@gmail.com       |
++-----------+----------+----------------+--------+-------+---------+-------------+--------------------------+
+3 rows in set (0.00 sec)
+
+UC5 -deleting the contact by their lastname
+
+mysql> delete from addressBook where lastname='deol';
+ERROR 1146 (42S02): Table 'AddressBookRecords.addressBook' doesn't exist
+mysql> delete from AddressBook where lastname='deol';
+Query OK, 1 row affected (0.20 sec)
+
+mysql> select * from AddressBook;
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+| firstName | lastName | address        | city   | state | Zipcode | phoneNumber | email                |
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+| Jaspreet  | Singh    | Radika Nagar   | Bhopal | M.P   |  490026 |  9425567078 | jassisingh@gmail.com |
+| Gurbaaz   | Singh    | Vaishali Nagar | Kanpur | U.P   |  490028 |  9425569078 | jaspreet@gmail.com   |
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+2 rows in set (0.00 sec)
+
+uc6 retrieving the contact by city or state
+
+mysql> select * from AddressBook where city = 'Kanpur' or State='M.P';
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+| firstName | lastName | address        | city   | state | Zipcode | phoneNumber | email                |
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+| Jaspreet  | Singh    | Radika Nagar   | Bhopal | M.P   |  490026 |  9425567078 | jassisingh@gmail.com |
+| Gurbaaz   | Singh    | Vaishali Nagar | Kanpur | U.P   |  490028 |  9425569078 | jaspreet@gmail.com   |
++-----------+----------+----------------+--------+-------+---------+-------------+----------------------+
+2 rows in set (0.00 sec)
+
+UC7 size of addressbook by city and state
+
+Database changed
+mysql> select count(firstname) from AddressBook where city = 'Bhopal';
++------------------+
+| count(firstname) |
++------------------+
+|                1 |
++------------------+
+1 row in set (0.06 sec)
+
+mysql> select count(firstname) from AddressBook where city = 'M.P';
++------------------+
+| count(firstname) |
++------------------+
+|                0 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(firstname) from AddressBook where city = 'kanpur';
++------------------+
+| count(firstname) |
++------------------+
+|                1 |
++------------------+
+1 row in set (0.01 sec)
+
+UC8 soriting the name alphbetically for given city
+
+mysql> insert into AddressBook(firstname,lastname,address,city,state,Zipcode,phoneNumber,email) values
+    -> ('Abhi','V','coorg','Chikkamagalur','Karnatak',50102,9874561023,'abhi@gmail.com');
+Query OK, 1 row affected (0.21 sec)
+
+mysql> insert into AddressBook(firstname,lastname,address,city,state,Zipcode,phoneNumber,email) values
+    -> ('Arbaaz','Mehra','Jalandhar','hadpur','Punjab',490067,97375383003,'jaskaur@gmail.com');
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into AddressBook(firstname,lastname,address,city,state,Zipcode,phoneNumber,email) values
+    -> ('Parmish','Verma','Amritsar','hardoi','Punjab',490066,97375383045,'jasmanak@gmail.com');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> select * from AddressBook;
++-----------+----------+----------------+---------------+----------+---------+-------------+----------------------+
+| firstName | lastName | address        | city          | state    | Zipcode | phoneNumber | email                |
++-----------+----------+----------------+---------------+----------+---------+-------------+----------------------+
+| Jaspreet  | Singh    | Radika Nagar   | Bhopal        | M.P      |  490026 |  9425567078 | jassisingh@gmail.com |
+| Gurbaaz   | Singh    | Vaishali Nagar | Kanpur        | U.P      |  490028 |  9425569078 | jaspreet@gmail.com   |
+| Abhi      | V        | coorg          | Chikkamagalur | Karnatak |   50102 |  9874561023 | abhi@gmail.com       |
+| Arbaaz    | Mehra    | Jalandhar      | hadpur        | Punjab   |  490067 | 97375383003 | jaskaur@gmail.com    |
+| Parmish   | Verma    | Amritsar       | hardoi        | Punjab   |  490066 | 97375383045 | jasmanak@gmail.com   |
++-----------+----------+----------------+---------------+----------+---------+-------------+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> select firstname,city from AddressBook order by city;
++-----------+---------------+
+| firstname | city          |
++-----------+---------------+
+| Jaspreet  | Bhopal        |
+| Abhi      | Chikkamagalur |
+| Arbaaz    | hadpur        |
+| Parmish   | hardoi        |
+| Gurbaaz   | Kanpur        |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+//
+
+
+
